@@ -119,6 +119,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Sudoku.cpp" />
     <ClCompile Include="src\Validate.cpp" />
   </ItemGroup>
