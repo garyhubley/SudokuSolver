@@ -38,6 +38,11 @@ int main() {
 
 	std::cout << puzzle << std::endl;
 	
+	for (int num = 0; num < Sudoku::ROWSIZE; num++ )
+	{
+		std::cout << "Row" << num + 1 << " is "
+			<< ( puzzle.isValidRow( static_cast< Sudoku::RowNum >( num ) ) ? "valid.\n" : "invalid\n" );
+	}
 	std::cin.clear();
 	std::cin.get();
 }

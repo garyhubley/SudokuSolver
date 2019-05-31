@@ -29,5 +29,8 @@
     <ClInclude Include="inc\Sudoku.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="inc\Utilities.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
