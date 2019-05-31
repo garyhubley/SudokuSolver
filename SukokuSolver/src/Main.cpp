@@ -54,3 +54,5 @@ Sudoku stringToSudoku( const std::string &str, Sudoku puzzle ) {
 	}
 	return puzzle;
 }
+
+void SudokuPrint
