@@ -9,6 +9,7 @@ public:
 	static const int PUZZLESIZE = 81;
 	enum class RowNum:int { R1, R2, R3, R4, R5, R6, R7, R8, R9 };
 	enum class ColNum:int { C1, C2, C3, C4, C5, C6, C7, C8, C9 };
+	enum class BoxNum:int { B1, B2, B3, B4, B5, B6, B7, B8, B9 };
 private:
 	int _puzzle[ PUZZLESIZE ];
 
@@ -20,6 +21,7 @@ public:
 
 	bool isValidRow( RowNum rowNum );
 	bool isValidCol( ColNum colNum );
+	bool isValidBox( BoxNum boxNum );
 
 	friend std::ostream &operator << ( std::ostream &out, const Sudoku &sudoku );
 };

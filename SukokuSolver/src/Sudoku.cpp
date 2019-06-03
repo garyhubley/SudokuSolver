@@ -21,18 +21,22 @@ bool Sudoku::isValidRow( RowNum rowNum ) {
 
 	for( int element = 0; element < ROWSIZE; ++element ) {
 		int elementValue = row[ element ];
-		if( elementValue != 0 && rowNumbersPresent[ elementValue - 1 ] == true ) {
+
+		if( elementValue != 0 ) {
+			if( rowNumbersPresent[ elementValue - 1 ] == true ) {
 			// duplicate row element. return false;
-			DEBUG_PRINT( "Duplicate element in row" );
-			return false;
+				DEBUG_PRINT( "Duplicate element in row" );
+				return false;
+			}
+			rowNumbersPresent[ elementValue - 1 ] = true;
 		}
-		rowNumbersPresent[ elementValue - 1 ] = true;
 	}
 
 	// check if all numbers were found
 	for( int element = 0; element < ROWSIZE; ++element ) {
 		if( rowNumbersPresent[ element ] == false ) {
 			// missing a number in a row. return false;
+			DEBUG_PRINT( "Missing element in row" );
 			return false;
 		}
 	}
@@ -41,23 +45,58 @@ bool Sudoku::isValidRow( RowNum rowNum ) {
 }
 
 bool Sudoku::isValidCol( ColNum colNum ) {
-	//bool rowNumbersPresent[ 9 ]{ false };
-	//int *row = _puzzle + ( 9 * static_cast< int >( rowNum ) );
+	bool colNumbersPresent[ 9 ]{ false };
+	int *col = _puzzle + static_cast< int >( colNum );
 
-	//for( int element = 0; element < ROWSIZE; ++element ) {
-	//	int elementValue = row[ element ];
-	//	if( elementValue != 0 && rowNumbersPresent[ elementValue - 1 ] == true ) {
-	//		// duplicate row element. return false;
-	//		DEBUG_PRINT( "Duplicate element in row" );
-	//		return false;
+	for( int element = 0; element < COLSIZE; ++element ) {
+		int elementValue = col[ element * 9 ];
+		if( elementValue != 0 ) {
+			if( colNumbersPresent[ elementValue - 1 ] == true ) {
+			// duplicate col element. return false;
+				DEBUG_PRINT( "Duplicate element in col" );
+				return false;
+			}
+			colNumbersPresent[ elementValue - 1 ] = true;
+		}
+	}
+
+	// check if all numbers were found
+	for( int element = 0; element < ROWSIZE; ++element ) {
+		if( colNumbersPresent[ element ] == false ) {
+			// missing a number in a row. return false;
+			DEBUG_PRINT( "Missing element in col" );
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool Sudoku::isValidBox( BoxNum boxNum ) {
+	bool boxNumbersPresent[ 9 ]{ false };
+	int *box = _puzzle;// +static_cast< int >( colNum );
+
+	for( int i = 0; i < 9; i++ ) {
+		int idx = ( i / 3 ) * 27 + ( i % 3 ) * 3;
+		std::cout << "index: " << idx << "\nElement: " << *( box + idx ) << std::endl;
+	}
+	//for( int element = 0; element < COLSIZE; ++element ) {
+	//	int elementValue = col[ element * 9 ];
+	//	if( elementValue != 0 ) {
+	//		if( colNumbersPresent[ elementValue - 1 ] == true ) {
+	//		// duplicate col element. return false;
+	//			DEBUG_PRINT( "Duplicate element in col" );
+	//			return false;
+	//		}
+	//		colNumbersPresent[ elementValue - 1 ] = true;
 	//	}
-	//	rowNumbersPresent[ elementValue - 1 ] = true;
 	//}
 
 	//// check if all numbers were found
 	//for( int element = 0; element < ROWSIZE; ++element ) {
-	//	if( rowNumbersPresent[ element ] == false ) {
+	//	if( colNumbersPresent[ element ] == false ) {
 	//		// missing a number in a row. return false;
+	//		DEBUG_PRINT( "Missing element in col" );
 	//		return false;
 	//	}
 	//}

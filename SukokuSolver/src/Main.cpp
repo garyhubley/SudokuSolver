@@ -6,8 +6,6 @@
 #include <string> 
 #include <sstream>
 
-Sudoku stringToSudoku( const std::string &str, Sudoku puzzle );
-
 int main() {
 	int level;
 	//std::cout << "Select level (0-5): ";
@@ -15,7 +13,7 @@ int main() {
 	std::ifstream puzzleFile;
 
 	// Open file relative to the project directory
-	puzzleFile.open( "Sudokus/Solved.txt" );
+	puzzleFile.open( "Sudokus/Level0.txt" );
 	if( !puzzleFile.is_open() ) {
 		std::cerr << "Failed to open puzzle file. :(" << std::endl;
 		std::cin.get();
@@ -32,16 +30,16 @@ int main() {
 	for( int lineNum = 0; lineNum < puzzleNum; ++lineNum ) {
 		puzzleFile >> line;
 	}
-	std::cout << "Puzz: " << line << std::endl;
-
-	Sudoku puzzle( line );
-
-	std::cout << puzzle << std::endl;
 	
+	Sudoku puzzle( line );
+	std::cout << "Puzz: " << std::endl << puzzle << std::endl;
+	puzzle.isValidBox( Sudoku::BoxNum::B1 );
 	for (int num = 0; num < Sudoku::ROWSIZE; num++ )
 	{
 		std::cout << "Row" << num + 1 << " is "
 			<< ( puzzle.isValidRow( static_cast< Sudoku::RowNum >( num ) ) ? "valid.\n" : "invalid\n" );
+		std::cout << "Col" << num + 1 << " is "
+			<< ( puzzle.isValidCol( static_cast< Sudoku::ColNum >( num ) ) ? "valid.\n" : "invalid\n" );
 	}
 	std::cin.clear();
 	std::cin.get();
