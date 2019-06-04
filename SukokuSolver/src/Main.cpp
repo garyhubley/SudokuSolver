@@ -13,7 +13,8 @@ int main() {
 	std::ifstream puzzleFile;
 
 	// Open file relative to the project directory
-	puzzleFile.open( "Sudokus/Level0.txt" );
+	//puzzleFile.open( "Sudokus/Level0.txt" );
+	puzzleFile.open( "Sudokus/Solved.txt" );
 	if( !puzzleFile.is_open() ) {
 		std::cerr << "Failed to open puzzle file. :(" << std::endl;
 		std::cin.get();
@@ -33,13 +34,15 @@ int main() {
 	
 	Sudoku puzzle( line );
 	std::cout << "Puzz: " << std::endl << puzzle << std::endl;
-	puzzle.isValidBox( Sudoku::BoxNum::B1 );
+	
 	for (int num = 0; num < Sudoku::ROWSIZE; num++ )
 	{
 		std::cout << "Row" << num + 1 << " is "
 			<< ( puzzle.isValidRow( static_cast< Sudoku::RowNum >( num ) ) ? "valid.\n" : "invalid\n" );
 		std::cout << "Col" << num + 1 << " is "
 			<< ( puzzle.isValidCol( static_cast< Sudoku::ColNum >( num ) ) ? "valid.\n" : "invalid\n" );
+		std::cout << "Box" << num + 1 << " is "
+			<< ( puzzle.isValidBox( static_cast< Sudoku::BoxNum >( num ) ) ? "valid.\n" : "invalid\n" );
 	}
 	std::cin.clear();
 	std::cin.get();
