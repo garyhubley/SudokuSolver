@@ -23,7 +23,7 @@ private:
 
 public:
 	Sudoku( const std::string &str );
-	Sudoku();
+	Sudoku() = delete;
 	~Sudoku();
 
 	static Sudoku::RowNum cellToRow( int cell );
@@ -37,12 +37,22 @@ public:
 	int isValidRow( RowNum rowNum );
 	int isValidCol( ColNum colNum );
 	int isValidBox( BoxNum boxNum );
-	void Possibilities();
+	//void Possibilities();
 	bool backtrackSolve( int cell );
 
 	friend std::ostream &operator << ( std::ostream &out, const Sudoku &sudoku );
-	friend std::ostream &operator << ( std::ostream &out, const RowNum &num );
-	friend std::ostream &operator << ( std::ostream &out, const ColNum &num );
-	friend std::ostream &operator << ( std::ostream &out, const BoxNum &num );
 };
 
+// The overloaded put-to operators below are to keep the code clean and concise. These remove the 
+// need to add "static_cast" before printing a Row, Col, or Box number. 
+inline std::ostream &operator << ( std::ostream &out, const Sudoku::RowNum &num ) {
+	return out << static_cast< int >( num );
+}
+
+inline std::ostream &operator << ( std::ostream &out, const Sudoku::ColNum &num ) {
+	return out << static_cast< int >( num );
+}
+
+inline std::ostream &operator << ( std::ostream &out, const Sudoku::BoxNum &num ) {
+	return out << static_cast< int >( num );
+}

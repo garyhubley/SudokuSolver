@@ -121,7 +121,7 @@
   <ItemGroup>
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Sudoku.cpp" />
-    <ClCompile Include="src\Validate.cpp" />
+    <ClCompile Include="src\Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\Sudoku.h" />

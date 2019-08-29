@@ -1,6 +1,5 @@
 #pragma once
 
-#include <sstream>
 #include <iostream>
 
 #ifdef _DEBUG
@@ -19,3 +18,7 @@
 
 #endif // _DEBUG
 
+
+int randomIntUniform( int low, int high );
+
+std::string getPuzzleString( std::ifstream &puzzleFile, int puzzleNumber );

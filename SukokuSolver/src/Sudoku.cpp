@@ -1,7 +1,7 @@
-
 #include "Sudoku.h"
-#include <sstream> 
 #include "Utilities.h"
+
+#include <sstream> 
 
 void Sudoku::ToSudoku( const std::string &str ) {
 	size_t len = str.length();
@@ -11,16 +11,14 @@ void Sudoku::ToSudoku( const std::string &str ) {
 		converter << str[ i ];
 		converter >> _puzzle[ i ];
 	}
-
 }
 
 int Sudoku::isValid( int *set ) {
 
 	bool missingValues[ NUMCELLVALUES ] = { true, true, true, true, true, true, true, true, true };
 
-
 	// check if all numbers were found
-	for( int element = 0; element < Sudoku::NUMCELLVALUES; ++element ) {
+	for( int element = 0; element < NUMCELLVALUES; ++element ) {
 		int elementValue = set[ element ];
 		int offByOneValue = elementValue - 1;
 
@@ -34,7 +32,7 @@ int Sudoku::isValid( int *set ) {
 		}
 	}
 
-	for( int element = 0; element < Sudoku::NUMCELLVALUES; ++element ) {
+	for( int element = 0; element < NUMCELLVALUES; ++element ) {
 		if( missingValues[ element ] ) {
 			DEBUG_PRINT( "  Missing at least one value." );
 			return MISSINGVALUE;
@@ -48,12 +46,8 @@ Sudoku::Sudoku( const std::string& str ) {
 	ToSudoku( str );
 }
 
-Sudoku::Sudoku() {
-
-}
-
 Sudoku::~Sudoku() {
-
+	// No memory management. 
 }
 
 Sudoku::RowNum Sudoku::cellToRow( int cell ) {
@@ -162,7 +156,7 @@ bool Sudoku::backtrackSolve( int cell ) {
 		cell++;
 	}
 
-	for( int value = 1; value <= 9; ++value ) {
+	for( int value = 1; value <= NUMCELLVALUES; ++value ) {
 		_puzzle[ cell ] = value;
 
 		DEBUG_PRINT( "\n\n" << *this );
@@ -184,6 +178,7 @@ bool Sudoku::backtrackSolve( int cell ) {
 }
 
 std::ostream& operator<<( std::ostream& out, const Sudoku& sudoku ) {
+	// The magic numbers in this function have been tested to work. Please don't change them.
 	for( int i = 0; i < Sudoku::COLSIZE; ++i ) {
 		for( int j = 0; j < 3; ++j ) {
 			out << sudoku._puzzle[ i * 9 + j ] << " ";
@@ -208,14 +203,3 @@ std::ostream& operator<<( std::ostream& out, const Sudoku& sudoku ) {
 	return out;
 }
 
-std::ostream &operator << ( std::ostream &out, const Sudoku::RowNum &num ) {
-	return out << static_cast< int >( num );
-}
-
-std::ostream &operator << ( std::ostream &out, const Sudoku::ColNum &num ) {
-	return out << static_cast< int >( num );
-}
-
-std::ostream &operator << ( std::ostream &out, const Sudoku::BoxNum &num ) {
-	return out << static_cast< int >( num );
-}
