@@ -5,16 +5,32 @@
 #include <fstream>
 #include <string> 
 #include <sstream>
+#include <iomanip>
 
-int main() {
+int main(int argc, char **argv) {
 	int level;
 	//std::cout << "Select level (0-5): ";
 	//std::cin >> level;
 	std::ifstream puzzleFile;
 
 	// Open file relative to the project directory
-	//puzzleFile.open( "Sudokus/Level0.txt" );
-	puzzleFile.open( "Sudokus/Solved.txt" );
+	
+	
+	// TODO: Create argument parser
+	std::string fileName;
+
+#ifdef _DEBUG
+	fileName = "Sudokus/Level0.txt";
+#else
+	if( argc < 2 ) {
+		std::cout << "No file provided, default file opened\n";
+		fileName = "Sudokus/Level0.txt";
+	} else {
+		fileName = argv[ 1 ];
+	}
+#endif
+	puzzleFile.open( fileName );
+
 	if( !puzzleFile.is_open() ) {
 		std::cerr << "Failed to open puzzle file. :(" << std::endl;
 		std::cin.get();
@@ -26,24 +42,19 @@ int main() {
 	std::uniform_int_distribution<int> uniform_dist( 1, 10000 );
 
 	int puzzleNum = uniform_dist( randomEngine );
-	std::cout << "PuzzNum: " << puzzleNum << std::endl;
+	std::cout << "Puzzle " << puzzleNum << " selected from " << fileName << std::endl;
+	
 	std::string line;
 	for( int lineNum = 0; lineNum < puzzleNum; ++lineNum ) {
 		puzzleFile >> line;
 	}
-	
+
 	Sudoku puzzle( line );
+
 	std::cout << "Puzz: " << std::endl << puzzle << std::endl;
-	
-	for (int num = 0; num < Sudoku::ROWSIZE; num++ )
-	{
-		std::cout << "Row" << num + 1 << " is "
-			<< ( puzzle.isValidRow( static_cast< Sudoku::RowNum >( num ) ) ? "valid.\n" : "invalid\n" );
-		std::cout << "Col" << num + 1 << " is "
-			<< ( puzzle.isValidCol( static_cast< Sudoku::ColNum >( num ) ) ? "valid.\n" : "invalid\n" );
-		std::cout << "Box" << num + 1 << " is "
-			<< ( puzzle.isValidBox( static_cast< Sudoku::BoxNum >( num ) ) ? "valid.\n" : "invalid\n" );
-	}
+	puzzle.backtrackSolve( 0 );
+	std::cout << std::endl << puzzle << std::endl << "Goodbye!";
+
 	std::cin.clear();
 	std::cin.get();
 }
