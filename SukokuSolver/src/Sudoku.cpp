@@ -25,7 +25,7 @@ int Sudoku::isValid( int *set ) {
 		if( elementValue != 0 ) {
 			if( missingValues[ offByOneValue ] == false ) {
 				// duplicate element
-				DEBUG_PRINT( "  Duplicate value " << elementValue );
+				//DEBUG_PRINT( "  Duplicate value " << elementValue );
 				return DUPLICATEVALUE;
 			}
 			missingValues[ offByOneValue ] = false;
@@ -34,7 +34,7 @@ int Sudoku::isValid( int *set ) {
 
 	for( int element = 0; element < NUMCELLVALUES; ++element ) {
 		if( missingValues[ element ] ) {
-			DEBUG_PRINT( "  Missing at least one value." );
+			//DEBUG_PRINT( "  Missing at least one value." );
 			return MISSINGVALUE;
 		}
 	}
@@ -99,7 +99,7 @@ void Sudoku::getBox( BoxNum boxNum, int *box ) {
 		box[ i ] = boxPtr[ elementToCellNumber( i ) ];
 	}
 
-	DEBUG_PRINT_BOX( box );
+	//DEBUG_PRINT_BOX( box );
 }
 
 int Sudoku::isValidRow( RowNum rowNum ) {
@@ -123,27 +123,55 @@ int Sudoku::isValidBox( BoxNum boxNum ) {
 	return isValid( box );
 }
 
-/*      DEAD CODE           */
-//void Sudoku::Possibilities() {
-//
-//	for( int cellnum = 0; cellnum < PUZZLESIZE; cellnum++ ) {
-//		if( _puzzle[ cellnum ] != 0 ) {
-//			// cell has been filled - no possibilities
-//			_cellPossibilities[ cellnum ][ 0 ] = 0;
-//		}
-//		auto box = cellToBox( cellnum );
-//		auto row = cellToRow( cellnum );
-//		auto col = cellToCol( cellnum );
-//
-//		if( isValidBox( box ) == VALID &&
-//			isValidRow( row ) == VALID &&
-//			isValidCol( col ) == VALID ) {
-//			// cell filled.
-//		}
-//
-//
-//	}
-//}
+int Sudoku::possibleCellValues( int cell, int *values ) {
+	if( _puzzle[ cell ] != 0 ) {
+		return 0;
+	}
+	int numValidValues = 0;
+
+	for( int value = 1; value <= NUMCELLVALUES; ++value ) {
+		if( isValuePossible( cell, value ) ) {
+			values[ numValidValues ] = value;
+			++numValidValues;
+		}
+	}
+	return numValidValues;
+}
+
+bool Sudoku::isValuePossible( int cell, int value ) {
+
+	_puzzle[ cell ] = value;
+
+	bool result =
+		isValidRow( cellToRow( cell ) ) != DUPLICATEVALUE &&
+		isValidCol( cellToCol( cell ) ) != DUPLICATEVALUE &&
+		isValidBox( cellToBox( cell ) ) != DUPLICATEVALUE;
+
+	_puzzle[ cell ] = 0;
+
+	return result;
+}
+
+/*void Sudoku::Possibilities() {
+	std::vector<int>
+	for( int cellnum = 0; cellnum < PUZZLESIZE; cellnum++ ) {
+		if( _puzzle[ cellnum ] != 0 ) {
+			// cell has been filled - no possibilities
+			_cellPossibilities[ cellnum ][ 0 ] = 0;
+		}
+		auto box = cellToBox( cellnum );
+		auto row = cellToRow( cellnum );
+		auto col = cellToCol( cellnum );
+
+		if( isValidBox( box ) == VALID &&
+			isValidRow( row ) == VALID &&
+			isValidCol( col ) == VALID ) {
+			// cell filled.
+		}
+
+
+	}
+}*/
 
 bool Sudoku::backtrackSolve( int cell ) {
 
@@ -175,6 +203,51 @@ bool Sudoku::backtrackSolve( int cell ) {
 	}
 	_puzzle[ cell ] = 0;
 	return false;
+}
+
+void Sudoku::penAndPaperSolve() {
+	int sizeCellValues[ 81 ];
+	int possibleValues[ 81 ][ 9 ];
+	for( int i = 0; i < 81; ++i ) {
+		for( int j = 0; j < 9; ++j ) {
+			possibleValues[ i ][ j ] = 0;
+		}
+	}
+
+	for( int cell = 0; cell < Sudoku::PUZZLESIZE; ++cell ) {
+		sizeCellValues[ cell ] = possibleCellValues( cell, possibleValues[ cell ] );
+	}
+
+	for( int cell = 0; cell < Sudoku::PUZZLESIZE; ++cell ) {
+		if( sizeCellValues[ cell ] == 1 ) {
+			_puzzle[ cell ] = possibleValues[ cell ][ 0 ];
+			possibleValues[ cell ][ 0 ] = 0;
+			sizeCellValues[ cell ] = 0;
+
+			//updateRowPossibilities( cellToRow( cell ) );
+			int row = static_cast< int >( cellToRow( cell ) );
+			int *rowPtr = possibleValues[ 9 * row ];
+
+			for( int rowElement = 0; rowElement < NUMCELLVALUES; rowElement+=9 ) {
+				rowPtr[ rowElement ];
+			}
+
+			// updateColPossibilities()
+			// updateBoxPossibilities()
+			cell = 0;
+		}
+
+	}
+
+	for( int cell = 0; cell < Sudoku::PUZZLESIZE; ++cell ) {
+		std::cout << "R" << cellToRow( cell ) << "C" << cellToCol( cell ) << ": \n  " <<
+			sizeCellValues[ cell ] << ": ";
+
+		for( int i = 0; i < sizeCellValues[ cell ]; ++i ) {
+			std::cout << possibleValues[ cell ][ i ] << " ";
+		}
+		std::cout << "\n\n";
+	}
 }
 
 std::ostream& operator<<( std::ostream& out, const Sudoku& sudoku ) {

@@ -5,6 +5,7 @@
 #include <fstream>
 #include <string> 
 
+
 int main( int argc, char **argv ) {
 
 	// TODO: Create argument parser
@@ -37,14 +38,17 @@ int main( int argc, char **argv ) {
 
 	std::cout << "Puzz: " << std::endl << puzzle << std::endl;
 
+#ifdef BACKTRACK
 	if( puzzle.backtrackSolve( 0 ) ) {
 		std::cout << std::endl << puzzle;
 	} else {
 		std::cout << std::endl << "This puzzle is unsolvable :(";
 	}
-	
+#endif
+	puzzle.penAndPaperSolve();
+
 	std::cout << std::endl << "Goodbye!";
-	
+
 	puzzleFile.close();
 
 	std::cin.clear();

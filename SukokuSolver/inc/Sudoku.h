@@ -37,8 +37,11 @@ public:
 	int isValidRow( RowNum rowNum );
 	int isValidCol( ColNum colNum );
 	int isValidBox( BoxNum boxNum );
-	//void Possibilities();
+	int possibleCellValues( int cell, int *values );
+	bool isValuePossible( int cell, int value );
+	void Possibilities();
 	bool backtrackSolve( int cell );
+	void penAndPaperSolve();
 
 	friend std::ostream &operator << ( std::ostream &out, const Sudoku &sudoku );
 };
